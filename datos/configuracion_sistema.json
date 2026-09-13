@@ -1,0 +1,52 @@
+{
+    "version": "1.0_preliminar",
+    "numero_contratos": 92,
+    "numero_grupos": 80,
+    "variables_predictoras": [
+        "monto_adjudicado_item_soles",
+        "reduccion_adjudicacion_pct",
+        "numero_ofertantes",
+        "dias_convocatoria_buenapro_limpio",
+        "dias_buenapro_consentimiento_limpio",
+        "plazo_contractual_original_dias",
+        "anio_inicio_contractual",
+        "nivel_gobierno_modelo",
+        "sistema_contratacion",
+        "tipo_proceso_seleccion",
+        "tipo_proveedor",
+        "provincia"
+    ],
+    "modelo_costo": {
+        "algoritmo": "Random Forest",
+        "objetivo": "Cualquier incremento neto del monto contractual",
+        "umbral_operativo": 0.55,
+        "niveles": {
+            "menor_0.55": "Vigilancia estándar",
+            "mayor_igual_0.55": "Vigilancia prioritaria"
+        },
+        "advertencia": "Componente exploratorio; puntaje no calibrado como probabilidad exacta.",
+        "parametros": {
+            "clasificador__max_depth": null,
+            "clasificador__max_features": "sqrt",
+            "clasificador__min_samples_leaf": 2,
+            "clasificador__n_estimators": 300
+        }
+    },
+    "modelo_plazo": {
+        "algoritmo": "Regresión logística",
+        "objetivo": "Fecha final actualizada posterior a la fecha final original",
+        "limite_bajo": 0.35,
+        "limite_alto": 0.65,
+        "niveles": {
+            "menor_0.35": "Riesgo bajo",
+            "0.35_a_0.65": "Riesgo medio",
+            "mayor_igual_0.65": "Riesgo alto"
+        },
+        "advertencia": "Los valores se presentan como puntajes de riesgo.",
+        "parametros": {
+            "clasificador__C": 0.05
+        }
+    },
+    "version_python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+    "version_sklearn": "1.6.1"
+}
