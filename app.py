@@ -22,7 +22,7 @@ st.markdown(
     .stApp { background: linear-gradient(145deg, #fff 0%, var(--fondo) 100%); }
     h1, h2, h3 { color:#3E3540; }
     .hero { padding:1.35rem 1.5rem; border-radius:22px; background:linear-gradient(120deg,#F8DDE7,#E8EEFC); border:1px solid #E8CBD6; margin-bottom:1rem; }
-    .hero h1 { margin:0; font-size:2rem; color:#3E3540 !important; }
+    .hero h1 { margin:0; font-size:2rem; }
     .hero p { margin:.45rem 0 0; color:#5F5661; }
     .resultado { padding:1.15rem; border-radius:18px; background:white; border:1px solid #E9DDE2; box-shadow:0 6px 18px rgba(91,68,79,.06); }
     .puntaje { font-size:2.15rem; font-weight:750; margin:.2rem 0; }
@@ -127,6 +127,38 @@ with tab_evaluacion:
             st.markdown(f'<div class="resultado"><h3>Componente de plazo</h3><div class="puntaje" style="color:{color_plazo}">{puntaje_plazo:.3f}</div><b>{nivel_plazo}</b><p>Nivel preliminar para priorizar la revisión técnica.</p></div>', unsafe_allow_html=True)
         st.markdown('<div class="aviso"><b>Interpretación:</b> estos puntajes permiten ordenar y priorizar contratos. No deben interpretarse como probabilidades exactas ni como una decisión automática.</div>', unsafe_allow_html=True)
 
+        reporte = pd.DataFrame([{
+            "Fecha de evaluación": pd.Timestamp.now(tz="America/Lima").strftime("%d/%m/%Y %H:%M"),
+            "Monto adjudicado del ítem (S/)": monto,
+            "Reducción en la adjudicación (%)": reduccion,
+            "Número de ofertantes": ofertantes,
+            "Días entre convocatoria y buena pro": dias_buena_pro,
+            "Días entre buena pro y consentimiento": dias_consentimiento,
+            "Plazo contractual original (días)": plazo_original,
+            "Año de inicio contractual": anio,
+            "Nivel de gobierno": nivel,
+            "Sistema de contratación": sistema,
+            "Tipo de proceso de selección": proceso,
+            "Tipo de proveedor": proveedor,
+            "Provincia": provincia,
+            "Puntaje del componente de costo": round(puntaje_costo, 3),
+            "Clasificación del componente de costo": nivel_costo,
+            "Puntaje del componente de plazo": round(puntaje_plazo, 3),
+            "Clasificación del componente de plazo": nivel_plazo,
+            "Nota de interpretación": (
+                "Los resultados son puntajes preliminares de apoyo para ordenar y priorizar "
+                "contratos; no son probabilidades exactas ni decisiones automáticas."
+            ),
+        }])
+        archivo_csv = reporte.to_csv(index=False).encode("utf-8-sig")
+        st.download_button(
+            "Descargar resultado en CSV",
+            data=archivo_csv,
+            file_name="resultado_evaluacion_contractual.csv",
+            mime="text/csv",
+            use_container_width=True,
+        )
+
 with tab_resultados:
     st.subheader("Desempeño externo de los modelos seleccionados")
     tabla = pd.DataFrame({
@@ -141,4 +173,3 @@ with tab_resultados:
     imagen = DATA_DIR / "figura_02_metricas_modelos.png"
     if imagen.exists():
         st.image(str(imagen), caption="Resultados medios de la validación anidada", use_container_width=True)
-
