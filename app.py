@@ -129,8 +129,8 @@ with tab_evaluacion:
 
         reporte = pd.DataFrame([{
             "Fecha de evaluación": pd.Timestamp.now(tz="America/Lima").strftime("%d/%m/%Y %H:%M"),
-            "Monto adjudicado del ítem (S/)": monto,
-            "Reducción en la adjudicación (%)": reduccion,
+            "Monto adjudicado del ítem (S/)": round(monto, 2),
+            "Reducción en la adjudicación (%)": round(reduccion, 2),
             "Número de ofertantes": ofertantes,
             "Días entre convocatoria y buena pro": dias_buena_pro,
             "Días entre buena pro y consentimiento": dias_consentimiento,
