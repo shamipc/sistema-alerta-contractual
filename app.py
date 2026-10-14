@@ -932,3 +932,16 @@ with tab_resultados:
 # P2_ANIOS_Y_AYUDAS
 
 # P2_ACLARACION_COBERTURA
+
+# Mejorar el contraste del tamaño de la base en el panel lateral.
+st.markdown(
+    """
+    <style>
+    [data-testid="stSidebar"] [data-testid="stMetricValue"],
+    [data-testid="stSidebar"] [data-testid="stMetricValue"] * {
+        color: #FFFFFF !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
